@@ -8,7 +8,7 @@ class AudioManager
 	bool m_SoundOn;
 
 	AudioManager()
-		: m_SoundOn(true)
+		: m_SoundOn(false)
 	{
 
 	}

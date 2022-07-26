@@ -9,6 +9,7 @@
 #include "Key.h"
 #include "Door.h"
 #include "Money.h"
+#include "Pet.h"
 #include "Goal.h"
 #include "AudioManager.h"
 #include "Utility.h"
@@ -69,6 +70,9 @@ bool GameplayState::Update(bool processInput)
 		int newPlayerX = m_player.GetXPosition();
 		int newPlayerY = m_player.GetYPosition();
 
+		int oldPlayerX = newPlayerX;
+		int oldPlayerY = newPlayerY;
+
 		// One of the arrow keys were pressed
 		if (input == kArrowInput)
 		{
@@ -112,6 +116,10 @@ bool GameplayState::Update(bool processInput)
 		else
 		{
 			HandleCollision(newPlayerX, newPlayerY);
+			if (m_player.GetPet() != nullptr)
+			{
+				m_player.GetPet()->SetPosition(oldPlayerX, oldPlayerY);
+			}
 		}
 	}
 	if (m_beatLevel)
@@ -214,12 +222,21 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			}
 			break;
 		}
+		case ActorType::Pet:
+		{
+			Pet* collidedPet = dynamic_cast<Pet*>(collidedActor);
+			assert(collidedPet);
+
+			m_player.SetPet(collidedPet);
+			break;
+		}
 		case ActorType::Goal:
 		{
 			Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
 			assert(collidedGoal);
 			collidedGoal->Remove();
 			m_player.SetPosition(newPlayerX, newPlayerY);
+			m_player.RemovePet();
 			m_beatLevel = true;
 			break;
 		}

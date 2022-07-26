@@ -51,6 +51,12 @@ void Player::DropKey()
 	}
 }
 
+void Player::RemovePet()
+{
+	//delete pet; why do I not need this?
+	pet = nullptr;
+}
+
 void Player::Draw()
 {
 	cout << "@";

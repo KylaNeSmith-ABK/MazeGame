@@ -2,9 +2,11 @@
 #include "PlacableActor.h"
 
 class Key;
+class Pet;
 
 class Player : public PlacableActor
 {
+	Pet* pet = nullptr;
 public:
 	Player();
 
@@ -14,6 +16,10 @@ public:
 	void UseKey();
 	void DropKey();
 	Key* GetKey() { return m_pCurrentKey; }
+
+	void SetPet(Pet* pet) { this->pet = pet; }
+	Pet* GetPet() { return pet; }
+	void RemovePet();
 
 	void AddMoney(int money) { m_money += money; }
 	int GetMoney() { return m_money; }
