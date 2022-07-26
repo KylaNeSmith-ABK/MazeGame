@@ -6,7 +6,6 @@ class Pet;
 
 class Player : public PlacableActor
 {
-	Pet* pet = nullptr;
 public:
 	Player();
 
@@ -17,8 +16,8 @@ public:
 	void DropKey();
 	Key* GetKey() { return m_pCurrentKey; }
 
-	void SetPet(Pet* pet) { this->pet = pet; }
-	Pet* GetPet() { return pet; }
+	void SetPet(Pet* pet) { this->m_pPet = pet; }
+	Pet* GetPet() { return m_pPet; }
 	void RemovePet();
 
 	void AddMoney(int money) { m_money += money; }
@@ -33,4 +32,6 @@ private:
 	Key* m_pCurrentKey;
 	int m_money;
 	int m_lives;
+
+	Pet* m_pPet = nullptr;
 };

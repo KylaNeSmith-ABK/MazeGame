@@ -53,8 +53,11 @@ void Player::DropKey()
 
 void Player::RemovePet()
 {
-	//delete pet; why do I not need this?
-	pet = nullptr;
+	if (m_pPet)
+	{
+		//m_pPet->Remove(); why does this line not work? error message is that Pet is an incomplete class
+		m_pPet = nullptr;
+	}
 }
 
 void Player::Draw()
