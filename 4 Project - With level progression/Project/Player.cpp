@@ -2,6 +2,7 @@
 
 #include "Player.h"
 #include "Key.h"
+#include "Pet.h"
 #include "AudioManager.h"
 
 using namespace std;
@@ -55,7 +56,7 @@ void Player::RemovePet()
 {
 	if (m_pPet)
 	{
-		//m_pPet->Remove(); why does this line not work? error message is that Pet is an incomplete class
+		m_pPet->Remove();
 		m_pPet = nullptr;
 	}
 }
