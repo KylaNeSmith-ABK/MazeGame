@@ -52,6 +52,19 @@ void Player::DropKey()
 	}
 }
 
+bool Player::HasPet()
+{
+	return (m_pPet != nullptr);
+}
+
+void Player::SetPetPosition(int xPosition, int yPosition)
+{
+	if (HasPet())
+	{
+		m_pPet->SetPosition(xPosition, yPosition);
+	}
+}
+
 void Player::RemovePet()
 {
 	if (m_pPet)

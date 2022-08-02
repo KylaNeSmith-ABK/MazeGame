@@ -33,6 +33,9 @@ public:
 	virtual void Draw() override;
 
 private:
+	virtual void ProcessInput();
+	virtual void HandleLevelBeaten();
+
 	void HandleCollision(int newPlayerX, int newPlayerY);
 	bool Load();
 	void DrawHUD(const HANDLE& console);

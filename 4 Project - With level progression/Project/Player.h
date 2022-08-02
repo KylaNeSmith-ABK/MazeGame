@@ -18,6 +18,8 @@ public:
 
 	void SetPet(Pet* pet) { this->m_pPet = pet; }
 	Pet* GetPet() { return m_pPet; }
+	bool HasPet();
+	void SetPetPosition(int xPosition, int yPosition);
 	void RemovePet();
 
 	void AddMoney(int money) { m_money += money; }
