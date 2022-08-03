@@ -30,6 +30,8 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_skipFrameCount(0)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
+	, m_RunThread(false)
+	, m_pInputProcessingThread(nullptr)
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
@@ -51,6 +53,8 @@ bool GameplayState::Load()
 	}
 
 	m_pLevel = new Level();
+	m_RunThread = true;
+	m_pInputProcessingThread = new thread([this]() {ProcessInput(); });
 	
 	return m_pLevel->Load(m_LevelNames.at(m_currentLevel), m_player.GetXPositionPointer(), m_player.GetYPositionPointer());
 
@@ -59,13 +63,16 @@ bool GameplayState::Load()
 void GameplayState::Enter()
 {
 	Load();
+
+	/*m_RunThread = true;
+	m_pInputProcessingThread = new thread([this]() {ProcessInput(); });*/
 }
 
 bool GameplayState::Update(bool processInput)
 {
 	if (processInput && !m_beatLevel)
 	{
-		ProcessInput();
+		//ProcessInput();
 	}
 	if (m_beatLevel)
 	{
@@ -77,71 +84,86 @@ bool GameplayState::Update(bool processInput)
 
 void GameplayState::ProcessInput()
 {
-	int input = _getch();
-	int arrowInput = 0;
-
-	int oldPlayerX = m_player.GetXPosition();
-	int oldPlayerY = m_player.GetYPosition();
-	int newPlayerX = oldPlayerX;
-	int newPlayerY = oldPlayerY;
-
-
-
-	// One of the arrow keys were pressed
-	if (input == kArrowInput)
+	while (m_RunThread)
 	{
-		arrowInput = _getch();
-	}
-
-	if ((input == kArrowInput && arrowInput == kLeftArrow) ||
-		(char)input == 'A' || (char)input == 'a')
-	{
-		newPlayerX--;
-	}
-	else if ((input == kArrowInput && arrowInput == kRightArrow) ||
-		(char)input == 'D' || (char)input == 'd')
-	{
-		newPlayerX++;
-	}
-	else if ((input == kArrowInput && arrowInput == kUpArrow) ||
-		(char)input == 'W' || (char)input == 'w')
-	{
-		newPlayerY--;
-	}
-	else if ((input == kArrowInput && arrowInput == kDownArrow) ||
-		(char)input == 'S' || (char)input == 's')
-	{
-		newPlayerY++;
-	}
-	else if (input == kEscapeKey)
-	{
-		m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
-	}
-	else if ((char)input == 'Z' || (char)input == 'z')
-	{
-		m_player.DropKey();
-	}
-
-	// If position never changed
-	if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
-	{
-		//return false;
-	}
-	else
-	{
-		HandleCollision(newPlayerX, newPlayerY);
-		if (m_player.HasPet())
+		if (m_beatLevel)
 		{
-			m_player.SetPetPosition(oldPlayerX, oldPlayerY);
+			return;
+		}
+
+		int input = _getch();
+		int arrowInput = 0;
+
+		int oldPlayerX = m_player.GetXPosition();
+		int oldPlayerY = m_player.GetYPosition();
+		int newPlayerX = oldPlayerX;
+		int newPlayerY = oldPlayerY;
+
+
+
+		// One of the arrow keys were pressed
+		if (input == kArrowInput)
+		{
+			arrowInput = _getch();
+		}
+
+		if ((input == kArrowInput && arrowInput == kLeftArrow) ||
+			(char)input == 'A' || (char)input == 'a')
+		{
+			newPlayerX--;
+		}
+		else if ((input == kArrowInput && arrowInput == kRightArrow) ||
+			(char)input == 'D' || (char)input == 'd')
+		{
+			newPlayerX++;
+		}
+		else if ((input == kArrowInput && arrowInput == kUpArrow) ||
+			(char)input == 'W' || (char)input == 'w')
+		{
+			newPlayerY--;
+		}
+		else if ((input == kArrowInput && arrowInput == kDownArrow) ||
+			(char)input == 'S' || (char)input == 's')
+		{
+			newPlayerY++;
+		}
+		else if (input == kEscapeKey)
+		{
+			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
+		}
+		else if ((char)input == 'Z' || (char)input == 'z')
+		{
+			m_player.DropKey();
+		}
+
+		// If position never changed
+		if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
+		{
+			//return false;
+		}
+		else
+		{
+			HandleCollision(newPlayerX, newPlayerY);
+			if (m_player.HasPet())
+			{
+				m_player.SetPetPosition(oldPlayerX, oldPlayerY);
+			}
 		}
 	}
 }
 
 void GameplayState::HandleLevelBeaten()
 {
+	
+
 	++m_skipFrameCount;
 	if (m_skipFrameCount > kFramesToSkip)
 	{
+		m_RunThread = false;
+		m_pInputProcessingThread->join();
+		m_pInputProcessingThread = nullptr;
+		delete(m_pInputProcessingThread);
+
 		m_beatLevel = false;
 		m_skipFrameCount = 0;
 		++m_currentLevel;

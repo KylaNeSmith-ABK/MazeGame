@@ -24,6 +24,9 @@ class GameplayState : public GameState
 
 	std::vector<std::string> m_LevelNames;
 
+	bool m_RunThread = false;
+	std::thread* m_pInputProcessingThread = nullptr;
+
 public:
 	GameplayState(StateMachineExampleGame* pOwner);
 	~GameplayState();

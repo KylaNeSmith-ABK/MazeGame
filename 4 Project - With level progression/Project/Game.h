@@ -6,6 +6,7 @@
 class Game
 {
 	GameStateMachine* m_pStateMachine;
+
 public:
 	Game();
 	void Initialize(GameStateMachine* pStateMachine);
