@@ -53,6 +53,7 @@ bool GameplayState::Load()
 	}
 
 	m_pLevel = new Level();
+
 	m_RunThread = true;
 	m_pInputProcessingThread = new thread([this]() {ProcessInput(); });
 	
@@ -63,9 +64,6 @@ bool GameplayState::Load()
 void GameplayState::Enter()
 {
 	Load();
-
-	/*m_RunThread = true;
-	m_pInputProcessingThread = new thread([this]() {ProcessInput(); });*/
 }
 
 bool GameplayState::Update(bool processInput)
