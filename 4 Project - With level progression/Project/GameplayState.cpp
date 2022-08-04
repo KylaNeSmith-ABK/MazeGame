@@ -68,10 +68,10 @@ void GameplayState::Enter()
 
 bool GameplayState::Update(bool processInput)
 {
-	if (processInput && !m_beatLevel)
+	/*if (processInput && !m_beatLevel)
 	{
-		//ProcessInput();
-	}
+		ProcessInput();
+	}*/
 	if (m_beatLevel)
 	{
 		HandleLevelBeaten();

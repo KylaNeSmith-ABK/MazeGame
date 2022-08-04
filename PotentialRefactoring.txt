@@ -1,0 +1,4 @@
+Other Potential Refactoring for the Maze Game:
+- Handling collision on Actors rather than Game State
+- Invistigating and fixing flickering
+- Removing, _getch in Process Input
