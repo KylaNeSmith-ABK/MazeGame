@@ -1,4 +1,7 @@
 Other Potential Refactoring for the Maze Game:
-- Handling collision on Actors rather than Game State
-- Invistigating and fixing flickering
-- Removing, _getch in Process Input
+- Handle collision on Actors rather than Game State
+- Invistigate and fixing flickering
+- Remove, _getch in Process Input
+- Handle Player movement on the Player instead of GameplayState
+- Maybe handle Draw in a separate thread
+- Why is GameplayState::Enter only calling Load? If that is all it is ever going to do, maybe make it one function
